@@ -25,6 +25,7 @@
             android:value="required" />
     </application>
 
-    <uses-feature android:name="android.hardware.camera.ar" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.hardware.camera.ar"/>
 
 </manifest>
