@@ -66,4 +66,9 @@ class Ingredient {
   final String name;
 
   final double footprint;
+
+  @override
+  String toString() {
+    return '$name: $footprint';
+  }
 }
