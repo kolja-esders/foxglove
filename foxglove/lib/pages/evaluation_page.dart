@@ -11,6 +11,11 @@ class EvaluationPage extends StatelessWidget {
 
   final Map<String, Ingredient> nameToIngredient;
 
+  final emojis = {
+    'Potatoes':
+        'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/potato_1f954.png',
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +76,8 @@ class EvaluationPage extends StatelessWidget {
       padding: EdgeInsets.all(8),
       child: Column(children: [
         Image.network(
-            'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/potato_1f954.png',
+            emojis[text] ??
+                'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/bento-box_1f371.png',
             scale: 2.0),
         Text(
           text,
