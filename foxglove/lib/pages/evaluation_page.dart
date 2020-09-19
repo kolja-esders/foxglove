@@ -2,9 +2,9 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 
 class EvaluationPage extends StatelessWidget {
-  EvaluationPage(this.imageUrl);
+  EvaluationPage(this.args);
 
-  final String imageUrl;
+  final EvaluationPageArgs args;
 
   @override
   Widget build(BuildContext context) {
@@ -14,32 +14,56 @@ class EvaluationPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: FancyShimmerImage(
-                  imageUrl: imageUrl,
-                ),
-              ),
-            ),
-          )
+          _buildImage(),
+          _buildFootprint(),
+          // _buildSuggestions(),
+          // _buildInstructions(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildFootprint() {
+    final totalFootprint = args.ingredients.map((i) => i.footprint).reduce((a, b) => a + b);
+
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.only(top: 16.0),
+      child: Text('CO2 footprint: $totalFootprint'),
+    );
+  }
+
+  Widget _buildImage() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 16.0),
+      child: Center(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: FancyShimmerImage(
+            imageUrl: args.imageUrl,
+          ),
+        ),
       ),
     );
   }
 }
 
-@JsonSerializable(nullable: false)
 class EvaluationPageArgs {
   EvaluationPageArgs({this.imageUrl, this.instructions, this.ingredients, this.alternatives});
 
-  final Map<String, String> alternatives;
+  final Map<String, List<Ingredient>> alternatives;
 
   final String imageUrl;
 
   final List<String> instructions;
 
-  final Map<String, double> ingredients;
+  final List<Ingredient> ingredients;
+}
+
+class Ingredient {
+  Ingredient(this.name, this.footprint);
+
+  final String name;
+
+  final double footprint;
 }
