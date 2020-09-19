@@ -22,19 +22,17 @@ import json
 import firebase_admin
 from firebase_admin import credentials
 
-cred = credentials.Certificate(
-    "/home/david/Downloads/foxglove/carbon-foodprint-5881e-firebase-adminsdk-r0nck-3a0b85478e.json"
-)
-firebase_admin.initialize_app(cred)
-
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../.."))
 
+base_dir = "/home/david/Downloads/foxglove/"
+
+cred = credentials.Certificate(os.path.join(base_dir, "carbon-foodprint-5881e-firebase-adminsdk-r0nck-3a0b85478e.json"))
+firebase_admin.initialize_app(cred)
 
 IG_USERNAME = "kolja.es"
 
-base_dir = "/home/david/Downloads/foxglove/"
 tmp_json = os.path.join(base_dir, "tmp_store.json")
 ig_tsmps = os.path.join(base_dir, "tmp.txt")
 req_store = {}
