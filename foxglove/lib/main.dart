@@ -1,3 +1,4 @@
+import 'package:carbon_foodprint/instagram_util.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,6 +23,8 @@ class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
   final String title;
+
+  final InstagramClient client = InstagramClient(username: 'kolja.es');
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -51,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () async => print(await widget.client.getMostRecentPostUrl()),
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
