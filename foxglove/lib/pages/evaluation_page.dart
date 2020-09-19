@@ -182,14 +182,6 @@ class EvaluationPage extends StatelessWidget {
                   1.0
                 ])),
           ),
-          // Positioned(
-          //   bottom: 0,
-          //   child: Container(
-          //     height: 50,
-          //     width: double.infinity,
-          //     decoration: BoxDecoration(gradient: LinearGradient(colors: [Colors.blue, Colors.red])),
-          //   ),
-          // ),
           Positioned(
             bottom: 0,
             child: Padding(
