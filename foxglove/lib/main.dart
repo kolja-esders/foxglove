@@ -18,12 +18,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Carbon Food Print',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Carbon Food Print'),
     );
   }
 }
@@ -48,7 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     firebaseMessaging.getToken().then((value) => print(value));
 
-    firebaseMessaging.subscribeToTopic("foods").whenComplete(() => print("Registered To Topic 'foods'"));
+    firebaseMessaging
+        .subscribeToTopic("foods")
+        .whenComplete(() => print("Registered To Topic 'foods'"));
 
     firebaseMessaging.configure(
       onLaunch: _handleNotification,
@@ -74,12 +76,15 @@ class _MyHomePageState extends State<MyHomePage> {
     final newIngredients = List.castFrom<dynamic, List<dynamic>>(data['new'])
         .map((e) => Ingredient(e.first as String, e.last as double))
         .toList();
-    final ingredients = List.castFrom<dynamic, List<dynamic>>(data['ingredients'])
-        .map((e) => Ingredient(e.first as String, e.last as double))
-        .toList();
-    final alternatives = Map.castFrom<String, dynamic, String, List<List<dynamic>>>(data['alternatives'])
+    final ingredients =
+        List.castFrom<dynamic, List<dynamic>>(data['ingredients'])
+            .map((e) => Ingredient(e.first as String, e.last as double))
+            .toList();
+    final alternatives = Map.castFrom<String, dynamic, String,
+            List<List<dynamic>>>(data['alternatives'])
         .cast()
-        .map((key, value) => MapEntry(key, value.map((e) => Ingredient(e.first as String, e.last as double))))
+        .map((key, value) => MapEntry(key,
+            value.map((e) => Ingredient(e.first as String, e.last as double))))
         .cast<String, List<Ingredient>>();
 
     final args = EvaluationPageArgs(
@@ -105,11 +110,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
+            Image(image: AssetImage('assets/cactus.gif')),
           ],
         ),
       ),
@@ -119,6 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
+      backgroundColor: Colors.white,
     );
   }
 }
