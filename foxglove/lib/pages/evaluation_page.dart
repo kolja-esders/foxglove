@@ -3,39 +3,65 @@ import 'package:flutter/material.dart';
 import 'package:flutter_emoji/flutter_emoji.dart';
 
 class EvaluationPage extends StatelessWidget {
-  EvaluationPage(this.args);
+  EvaluationPage(this.args)
+      : nameToIngredient =
+            Map.fromIterable(args.ingredients, key: (i) => i.name);
 
   final EvaluationPageArgs args;
+
+  final Map<String, Ingredient> nameToIngredient;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(args.title),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildImage(),
-            _buildFootprint(),
-            _buildIngredients(),
-            _buildSuggestions(),
-            // _buildInstructions(),
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildImage(),
+              Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    _buildFootprint(),
+                    _buildIngredients(),
+                    _buildSuggestions(),
+                  ],
+                ),
+              ),
+              // _buildInstructions(),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildPill(String text, Color color) {
+  Widget _buildPill(String text, {bool isGood, double footprint}) {
+    final bgColor = isGood ? Colors.green.shade100 : Colors.red.shade100;
+    final fgColor = isGood ? Colors.green.shade50 : Colors.red.shade50;
+
     return Container(
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(4), color: color),
-      padding: EdgeInsets.all(8),
-      child: Text(text),
-    );
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4), color: bgColor),
+        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        child: Row(
+          children: [
+            Text(text),
+            if (footprint != null)
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2), color: fgColor),
+                padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                margin: EdgeInsets.only(left: 4),
+                child: Text(
+                  '$footprint kg CO\u2082',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                ),
+              ),
+          ],
+        ));
   }
 
   Widget _buildPill2(String text, double footprint, String emoji) {
@@ -64,7 +90,8 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildIngredientPill(Ingredient ingredient, Color color) {
-    return _buildPill(ingredient.name, color);
+    return _buildPill(ingredient.name,
+        isGood: true, footprint: ingredient.footprint);
   }
 
   Widget _buildAlternatives(String orig, List<Ingredient> alternatives) {
@@ -75,15 +102,19 @@ class EvaluationPage extends StatelessWidget {
     widgets = widgets.take(widgets.length - 1).toList();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2.0),
-      child: Row(
-        children: [
-          Text('Replace '),
-          _buildPill(orig, Colors.red.shade100),
-          Text(' with '),
-          ...widgets,
-          Text('.'),
-        ],
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            Text('Replace '),
+            _buildPill(orig,
+                isGood: false, footprint: nameToIngredient[orig].footprint),
+            Text(' with '),
+            ...widgets,
+            Text('.'),
+          ],
+        ),
       ),
     );
   }
@@ -93,7 +124,7 @@ class EvaluationPage extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Text(
         text,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 32),
       ),
     );
   }
@@ -130,8 +161,6 @@ class EvaluationPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             new Container(
-                //width: 50.0,
-                //height: 50.0,
                 padding: const EdgeInsets.all(30.0),
                 decoration: new BoxDecoration(
                   shape: BoxShape.circle,
@@ -147,7 +176,7 @@ class EvaluationPage extends StatelessWidget {
                           color: Colors.blue.shade300),
                     ),
                     Text(
-                      'kg CO2',
+                      'kg CO\u2082',
                       style: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 16,
@@ -173,12 +202,48 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    return Center(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: FancyShimmerImage(
-          imageUrl: args.imageUrl,
-        ),
+    return Container(
+      width: double.infinity,
+      height: 250,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          FittedBox(
+            fit: BoxFit.cover,
+            child: FancyShimmerImage(
+              imageUrl: args.imageUrl,
+            ),
+          ),
+          Container(
+            height: 350.0,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                gradient: LinearGradient(
+                    begin: FractionalOffset.topCenter,
+                    end: FractionalOffset.bottomCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.0),
+                      Colors.black.withOpacity(0.8),
+                    ],
+                    stops: [
+                      0.5,
+                      1.0
+                    ])),
+          ),
+          Positioned(
+            bottom: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                args.title,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
