@@ -66,15 +66,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
     Map<String, dynamic> data = jsonDecode(res.body);
     print(data);
+
     final instructions = List.castFrom<dynamic, String>(data['instructions']);
     final title = data['title'] as String;
     final url = data['url'] as String;
-    // final alternatives = Map.castFrom(data['alternatives']);
-    // final ingredients =
-    //     List.castFrom<dynamic, List<String>>(['ingredients']).map((e) => Ingredient(e.first, double.parse(e.last)));
+    final newIngredients =
+        List.castFrom<dynamic, List<dynamic>>(data['new']).map((e) => Ingredient(e.first as String, e.last as double));
+    final ingredients = List.castFrom<dynamic, List<dynamic>>(data['ingredients'])
+        .map((e) => Ingredient(e.first as String, e.last as double));
+    final alternatives = Map.castFrom<String, dynamic, String, List<List<dynamic>>>(data['alternatives'])
+        .map((key, value) => MapEntry(key, value.map((e) => Ingredient(e.first as String, e.last as double))));
 
     print(instructions);
-    // print(ingredients);
+    print(newIngredients);
+    print(ingredients);
+    print(alternatives);
     print(title);
     print(url);
 
