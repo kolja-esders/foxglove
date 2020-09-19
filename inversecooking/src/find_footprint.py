@@ -7,7 +7,7 @@ from collections import defaultdict
 
 def parse_co2():
 
-    co2_dict = {}
+    co2_def_dict = defaultdict(list)
 
     import urllib.request
 
@@ -39,12 +39,19 @@ def parse_co2():
 
         print(food_name, float(kg_co2))
 
-        co2_dict[food_name.lower().strip().replace(" ", "_")] = float(kg_co2)
+        food_id = food_name.lower().strip().replace(" ", "_")
+
+        co2_def_dict[food_id].append(float(kg_co2))
+
+    co2_dict = {k: np.mean(v_list) for k, v_list in co2_def_dict.items()}
 
     return co2_dict
 
 
 def build_ingridient_maps():
+
+    np.random.seed(1234)
+    random.seed(1234)
 
     co2_dict = parse_co2()
 
@@ -57,7 +64,10 @@ def build_ingridient_maps():
     for ingr in ingrs_vocab:
         if "<" not in ingr:
             # ingr_co2_map[ingr] = np.max(0.0, (np.random.randn() + 2.0) * 2.0)
-            ingr_co2_map[ingr] = np.max(((np.random.randn() + 1.0) * 2, 0.01))
+            rnd_val = (np.random.randn() + 1.0) * 2
+            if rnd_val < 0.0:
+                rnd_val = np.random.rand()
+            ingr_co2_map[ingr] = rnd_val
 
             if (
                 "beef" in ingr
