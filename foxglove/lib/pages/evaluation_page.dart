@@ -12,19 +12,58 @@ class EvaluationPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Carbon Foodprint'),
       ),
-      body: Column(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildImage(),
+            _buildFootprint(),
+            _buildSuggestions(),
+            // _buildInstructions(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPill(String text, Color color) {
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: color),
+      child: Text(text),
+    );
+  }
+
+  Widget _buildIngredientPill(Ingredient ingredient, Color color) {
+    return _buildPill(ingredient.name, color);
+  }
+
+  Widget _buildAlternatives(String orig, List<Ingredient> alternatives) {
+    return Row(
+      children: [
+        _buildPill(orig, Colors.red.shade200),
+        ...alternatives.map((i) => _buildIngredientPill(i, Colors.green.shade200)),
+      ],
+    );
+  }
+
+  Widget _buildSuggestions() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Column(
         children: [
-          _buildImage(),
-          _buildFootprint(),
-          // _buildSuggestions(),
-          // _buildInstructions(),
+          Text(
+            'How to improve',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          // ...args.alternatives.((key, value) => _buildAlternatives(key, value))
         ],
       ),
     );
   }
 
   Widget _buildFootprint() {
-    final totalFootprint = args.ingredients.map((i) => i.footprint).reduce((a, b) => a + b);
+    final totalFootprint = args.ingredients.map((i) => i.footprint).reduce((a, b) => a + b) / args.ingredients.length;
 
     return Container(
       alignment: Alignment.center,
@@ -34,14 +73,11 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Center(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: FancyShimmerImage(
-            imageUrl: args.imageUrl,
-          ),
+    return Center(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: FancyShimmerImage(
+          imageUrl: args.imageUrl,
         ),
       ),
     );
