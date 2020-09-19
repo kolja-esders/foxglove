@@ -27,15 +27,38 @@ class EvaluationPage extends StatelessWidget {
     );
   }
 
+  Widget _buildPill(String text, Color color) {
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: color),
+      child: Text(text),
+    );
+  }
+
+  Widget _buildIngredientPill(Ingredient ingredient, Color color) {
+    return _buildPill(ingredient.name, color);
+  }
+
   Widget _buildAlternatives(String orig, List<Ingredient> alternatives) {
-    return Container();
+    return Row(
+      children: [
+        _buildPill(orig, Colors.red.shade200),
+        ...alternatives.map((i) => _buildIngredientPill(i, Colors.green.shade200)),
+      ],
+    );
   }
 
   Widget _buildSuggestions() {
-    return Column(
-      children: [
-        Text('How to improve'),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Column(
+        children: [
+          Text(
+            'How to improve',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          // ...args.alternatives.((key, value) => _buildAlternatives(key, value))
+        ],
+      ),
     );
   }
 
