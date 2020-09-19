@@ -15,6 +15,9 @@ dependencies:
   flutter_local_notifications: ^1.4.4+4
   insta_html_parser: ^0.1.1
   http: ^0.12.2
+  firebase_messaging: ^7.0.0
+  fancy_shimmer_image: ^1.2.0
+  json_serializable: ^3.4.1
 
 dev_dependencies:
   flutter_test:

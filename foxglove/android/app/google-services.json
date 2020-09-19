@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "524467269534",
+    "firebase_url": "https://carbon-foodprint-5881e.firebaseio.com",
+    "project_id": "carbon-foodprint-5881e",
+    "storage_bucket": "carbon-foodprint-5881e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524467269534:android:72973e20f59fd3283c308f",
+        "android_client_info": {
+          "package_name": "com.example.foxglove"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "524467269534-15mhrcms1np3jashhkpt9sm27fe83jsu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmEqDgG_JxwHbbdUj9vOfoHfqnr2W4UvY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "524467269534-15mhrcms1np3jashhkpt9sm27fe83jsu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
