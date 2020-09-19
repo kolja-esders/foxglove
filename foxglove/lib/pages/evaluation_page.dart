@@ -1,8 +1,11 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 
 class EvaluationPage extends StatelessWidget {
-  EvaluationPage(this.args) : nameToIngredient = Map.fromIterable(args.ingredients, key: (i) => i.name);
+  EvaluationPage(this.args)
+      : nameToIngredient =
+            Map.fromIterable(args.ingredients, key: (i) => i.name);
 
   final EvaluationPageArgs args;
 
@@ -11,20 +14,23 @@ class EvaluationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(args.title),
-      ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+        child: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildImage(),
-              _buildFootprint(),
-              _buildIngredients(),
-              _buildSuggestions(),
-              _buildInstructions(),
+              Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    _buildFootprint(),
+                    _buildIngredients(),
+                    _buildSuggestions(),
+                    _buildInstructions(),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -37,14 +43,16 @@ class EvaluationPage extends StatelessWidget {
     final fgColor = isGood ? Colors.green.shade50 : Colors.red.shade50;
 
     return Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: bgColor),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4), color: bgColor),
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         child: Row(
           children: [
             Text(text),
             if (footprint != null)
               Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(2), color: fgColor),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2), color: fgColor),
                 padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                 margin: EdgeInsets.only(left: 4),
                 child: Text(
@@ -56,12 +64,40 @@ class EvaluationPage extends StatelessWidget {
         ));
   }
 
+  Widget _buildPill2(String text, double footprint, String emoji) {
+    return Container(
+      //decoration:
+      //   BoxDecoration(borderRadius: BorderRadius.circular(4), color: color),
+      padding: EdgeInsets.all(8),
+      child: Column(children: [
+        Image.network(
+            'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/potato_1f954.png',
+            scale: 2.0),
+        Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+        ),
+        Text(footprint.toStringAsFixed(2) + "kg CO2",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontStyle: FontStyle.italic)),
+      ]),
+    );
+  }
+
+  Widget _buildIngredientPill2(Ingredient ingredient) {
+    return _buildPill2(ingredient.name, ingredient.footprint, "coffee");
+  }
+
   Widget _buildIngredientPill(Ingredient ingredient, Color color) {
-    return _buildPill(ingredient.name, isGood: true, footprint: ingredient.footprint);
+    return _buildPill(ingredient.name,
+        isGood: true, footprint: ingredient.footprint);
   }
 
   Widget _buildAlternatives(String orig, List<Ingredient> alternatives) {
-    List<Widget> widgets = alternatives.map((i) => _buildIngredientPill(i, Colors.green.shade100)).toList();
+    List<Widget> widgets = alternatives
+        .map((i) => _buildIngredientPill(i, Colors.green.shade100))
+        .toList();
     widgets = widgets.expand((element) => [element, Text(', ')]).toList();
     widgets = widgets.take(widgets.length - 1).toList();
 
@@ -72,7 +108,8 @@ class EvaluationPage extends StatelessWidget {
         child: Row(
           children: [
             Text('Replace '),
-            _buildPill(orig, isGood: false, footprint: nameToIngredient[orig].footprint),
+            _buildPill(orig,
+                isGood: false, footprint: nameToIngredient[orig].footprint),
             Text(' with '),
             ...widgets,
             Text('.'),
@@ -87,7 +124,7 @@ class EvaluationPage extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Text(
         text,
-        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
+        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 32),
       ),
     );
   }
@@ -112,7 +149,9 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildFootprint() {
-    final totalFootprint = args.ingredients.map((i) => i.footprint).reduce((a, b) => a + b) / args.ingredients.length;
+    final totalFootprint =
+        args.ingredients.map((i) => i.footprint).reduce((a, b) => a + b) /
+            args.ingredients.length;
 
     return Container(
         alignment: Alignment.center,
@@ -122,8 +161,6 @@ class EvaluationPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             new Container(
-                //width: 50.0,
-                //height: 50.0,
                 padding: const EdgeInsets.all(30.0),
                 decoration: new BoxDecoration(
                   shape: BoxShape.circle,
@@ -133,11 +170,17 @@ class EvaluationPage extends StatelessWidget {
                   children: [
                     Text(
                       '$totalFootprint',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 36, color: Colors.blue.shade300),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 36,
+                          color: Colors.blue.shade300),
                     ),
                     Text(
-                      'kg CO2',
-                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16, color: Colors.blue.shade300),
+                      'kg CO\u2082',
+                      style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                          color: Colors.blue.shade300),
                     ),
                   ],
                 )),
@@ -146,11 +189,14 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildIngredients() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 32.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [...args.ingredients.map((i) => _buildIngredientPill(i, Colors.red.shade200))],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [...args.ingredients.map((i) => _buildIngredientPill2(i))],
+        ),
       ),
     );
   }
@@ -187,12 +233,48 @@ class EvaluationPage extends StatelessWidget {
 
 
   Widget _buildImage() {
-    return Center(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: FancyShimmerImage(
-          imageUrl: args.imageUrl,
-        ),
+    return Container(
+      width: double.infinity,
+      height: 250,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          FittedBox(
+            fit: BoxFit.cover,
+            child: FancyShimmerImage(
+              imageUrl: args.imageUrl,
+            ),
+          ),
+          Container(
+            height: 350.0,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                gradient: LinearGradient(
+                    begin: FractionalOffset.topCenter,
+                    end: FractionalOffset.bottomCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.0),
+                      Colors.black.withOpacity(0.8),
+                    ],
+                    stops: [
+                      0.5,
+                      1.0
+                    ])),
+          ),
+          Positioned(
+            bottom: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                args.title,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -200,7 +282,12 @@ class EvaluationPage extends StatelessWidget {
 
 class EvaluationPageArgs {
   EvaluationPageArgs(
-      {this.imageUrl, this.title, this.instructions, this.ingredients, this.alternatives, this.newIngredients});
+      {this.imageUrl,
+      this.title,
+      this.instructions,
+      this.ingredients,
+      this.alternatives,
+      this.newIngredients});
 
   final String title;
 
