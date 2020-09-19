@@ -64,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print("Got a new Message");
     final id = message['data']['id'];
 
-    final res = await http.get('http://48d6a3f4ac35.ngrok.io/id?id=$id');
+    final res = await http.get('http://e9c50556c597.ngrok.io/id?id=$id');
 
     Map<String, dynamic> data = jsonDecode(res.body);
 

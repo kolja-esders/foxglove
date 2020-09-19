@@ -19,6 +19,7 @@ class EvaluationPage extends StatelessWidget {
           children: [
             _buildImage(),
             _buildFootprint(),
+            _buildIngredients(),
             _buildSuggestions(),
             // _buildInstructions(),
           ],
@@ -68,8 +69,50 @@ class EvaluationPage extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       padding: const EdgeInsets.only(top: 16.0),
-      child: Text('CO2 footprint: $totalFootprint'),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
+
+        children: [
+          new Container(
+          //width: 50.0,
+          //height: 50.0,
+          padding: const EdgeInsets.all(30.0),
+          decoration: new BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.blueGrey.shade50,
+          ),
+            child: new Column(
+                    children: [
+                      Text(
+                        '$totalFootprint',
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue.shade100, fontSize: 36),
+                      ),
+                      Text(
+                        'kg CO2',
+                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16, color: Colors.blue.shade100),
+                      ),
+
+                    ],
+            )
+          ),
+        ],
+      )
     );
+  }
+
+
+  Widget _buildIngredients() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 32.0),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          ...args.ingredients.map((i) => _buildIngredientPill(i, Colors.red.shade200))
+        ],
+      ),
+    );
+
   }
 
   Widget _buildImage() {
