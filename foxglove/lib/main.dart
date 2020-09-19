@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
       newIngredients: newIngredients,
     );
 
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => EvaluationPage(args)),
     );
