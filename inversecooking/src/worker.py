@@ -193,8 +193,7 @@ def send_to_topic(payload):
     payload["click_action"] = "FLUTTER_NOTIFICATION_CLICK"
 
     message = messaging.Message(
-        data=payload,
-        topic=topic,
+        data=payload, topic=topic, notification=messaging.Notification(title="Food-Alarm", body="Found new food!")
     )
 
     # Send a message to the devices subscribed to the provided topic.
