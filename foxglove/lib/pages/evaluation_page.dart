@@ -12,19 +12,35 @@ class EvaluationPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Carbon Foodprint'),
       ),
-      body: Column(
-        children: [
-          _buildImage(),
-          _buildFootprint(),
-          // _buildSuggestions(),
-          // _buildInstructions(),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildImage(),
+            _buildFootprint(),
+            _buildSuggestions(),
+            // _buildInstructions(),
+          ],
+        ),
       ),
     );
   }
 
+  Widget _buildAlternatives(String orig, List<Ingredient> alternatives) {
+    return Container();
+  }
+
+  Widget _buildSuggestions() {
+    return Column(
+      children: [
+        Text('How to improve'),
+      ],
+    );
+  }
+
   Widget _buildFootprint() {
-    final totalFootprint = args.ingredients.map((i) => i.footprint).reduce((a, b) => a + b);
+    final totalFootprint = args.ingredients.map((i) => i.footprint).reduce((a, b) => a + b) / args.ingredients.length;
 
     return Container(
       alignment: Alignment.center,
@@ -34,14 +50,11 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Center(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: FancyShimmerImage(
-            imageUrl: args.imageUrl,
-          ),
+    return Center(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0),
+        child: FancyShimmerImage(
+          imageUrl: args.imageUrl,
         ),
       ),
     );
