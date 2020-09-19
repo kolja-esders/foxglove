@@ -62,10 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final id = message['data']['id'];
 
     final res = await http.get('http://48d6a3f4ac35.ngrok.io/id?id=$id');
-    print(res.body);
 
     Map<String, dynamic> data = jsonDecode(res.body);
-    print(data);
 
     final instructions = List.castFrom<dynamic, String>(data['instructions']);
     final title = data['title'] as String;
@@ -75,28 +73,15 @@ class _MyHomePageState extends State<MyHomePage> {
     final ingredients = List.castFrom<dynamic, List<dynamic>>(data['ingredients'])
         .map((e) => Ingredient(e.first as String, e.last as double));
     final alternatives = Map.castFrom<String, dynamic, String, List<List<dynamic>>>(data['alternatives'])
+        .cast()
         .map((key, value) => MapEntry(key, value.map((e) => Ingredient(e.first as String, e.last as double))));
-
-    print(instructions);
-    print(newIngredients);
-    print(ingredients);
-    print(alternatives);
-    print(title);
-    print(url);
 
     final args = EvaluationPageArgs(
       imageUrl: url,
       instructions: instructions,
-      alternatives: {
-        'rice': [
-          Ingredient('caciocavallo', 1.4556092525771795),
-          Ingredient('tonkatsu_sauce', 1.1728355761916132),
-        ]
-      },
-      ingredients: [
-        Ingredient('rice', 3.7423330502115872),
-        Ingredient('nori', 2.8853163760624394),
-      ],
+      alternatives: alternatives,
+      ingredients: ingredients,
+      newIngredients: newIngredients,
     );
 
     Navigator.pushReplacement(
