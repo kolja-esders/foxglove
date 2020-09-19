@@ -1,4 +1,6 @@
 import 'package:carbon_foodprint/instagram_util.dart';
+import 'package:carbon_foodprint/pages/evaluation_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -6,6 +8,10 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  // MyApp();
+
+  // final FirebaseMessaging firebaseMessaging;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,7 +37,33 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  @override
+  void initState() {
+    super.initState();
+
+    final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+
+    firebaseMessaging.getToken().then((value) => print(value));
+
+    firebaseMessaging.configure(
+      onLaunch: _handleNotification,
+      onMessage: _handleNotification,
+      onResume: _handleNotification,
+    );
+
+    // The FCM token can be used for testing messages.
+    firebaseMessaging.getToken().then((value) => print(value));
+  }
+
+  Future<void> _handleNotification(Map<dynamic, dynamic> message) async {
+    print(message);
+    final imageUrl = message['data']['img'];
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => EvaluationPage(imageUrl)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +77,6 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Text(
               'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),
