@@ -111,11 +111,11 @@ class EvaluationPage extends StatelessWidget {
                     children: [
                       Text(
                         '$totalFootprint',
-                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue.shade100, fontSize: 36),
+                        style: TextStyle(fontWeight: FontWeight.bold,  fontSize: 36, color: Colors.blue.shade300),
                       ),
                       Text(
                         'kg CO2',
-                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16, color: Colors.blue.shade100),
+                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16, color: Colors.blue.shade300),
                       ),
 
                     ],
