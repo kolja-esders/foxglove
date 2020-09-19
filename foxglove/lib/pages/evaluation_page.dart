@@ -31,6 +31,7 @@ class EvaluationPage extends StatelessWidget {
   Widget _buildPill(String text, Color color) {
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: color),
+      padding: EdgeInsets.all(8),
       child: Text(text),
     );
   }
@@ -40,24 +41,48 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildAlternatives(String orig, List<Ingredient> alternatives) {
-    return Row(
-      children: [
-        _buildPill(orig, Colors.red.shade200),
-        ...alternatives.map((i) => _buildIngredientPill(i, Colors.green.shade200)),
-      ],
+    List<Widget> widgets = alternatives.map((i) => _buildIngredientPill(i, Colors.green.shade100)).toList();
+    widgets = widgets.expand((element) => [element, Text(', ')]).toList();
+    widgets = widgets.take(widgets.length - 1).toList();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      child: Row(
+        children: [
+          Text('Replace '),
+          _buildPill(orig, Colors.red.shade100),
+          Text(' with '),
+          ...widgets,
+          Text('.'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeadline(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Text(
+        text,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      ),
     );
   }
 
   Widget _buildSuggestions() {
+    final alternatives = <Widget>[];
+    for (final alternative in args.alternatives.keys) {
+      final ingredients = args.alternatives[alternative];
+      alternatives.add(_buildAlternatives(alternative, ingredients));
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'How to improve',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-          // ...args.alternatives.((key, value) => _buildAlternatives(key, value))
+          _buildHeadline('How to improve'),
+          ...alternatives,
         ],
       ),
     );

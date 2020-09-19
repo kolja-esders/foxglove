@@ -25,14 +25,16 @@ tmp_json = os.path.join(base_dir, "tmp_store.json")
 
 @app.route("/food", methods=["GET"])
 def process_img():
-    from worker import process_url
+    from worker import process_url, FoodProcessor
+
+    food_processor = FoodProcessor()
 
     url = request.args.get("url")
     url = urllib.parse.unquote(url)
 
     print("Got URL")
 
-    return jsonify(process_url(url))
+    return jsonify(process_url(url, food_processor))
 
 
 @app.route("/id", methods=["GET"])
@@ -55,8 +57,11 @@ def get_content():
         is_valid = False
         title = "Awesome Recipe"
         ingrids = [("Potatoes", 1.0), ("And more Potatoes", 1.0)]
-        alt_ingrids = {"Potatoes": [("Carrott", 0.5)]}
-        new_ingrids = [("Carrot", 0.5), ("And more Potatoes", 1.0)]
+        alt_ingrids = {
+            "Potatoes": [("Carrott", 0.5), ("Pumpkin", 0.4)],
+            "And more Potatoes": [("Pumpkin", 0.4), ("Carrot", 0.5)],
+        }
+        new_ingrids = [("Carrot", 0.5), ("Pumpkin", 0.4)]
         recipes = ["Eat", "Sleep", "Train", "Repeat"]
 
         ret_dict = {

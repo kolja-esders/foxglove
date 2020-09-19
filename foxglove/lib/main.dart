@@ -18,12 +18,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Carbon Food Print',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Carbon Food Print'),
     );
   }
 }
@@ -79,14 +79,15 @@ class _MyHomePageState extends State<MyHomePage> {
         .toList();
     final alternatives = Map.castFrom<String, dynamic, String, List<List<dynamic>>>(data['alternatives'])
         .cast()
-        .map((key, value) => MapEntry(key, value.map((e) => Ingredient(e.first as String, e.last as double))))
+        .map((key, value) =>
+            MapEntry(key, (value as List).map((e) => Ingredient(e.first as String, e.last as double)).toList()))
         .cast<String, List<Ingredient>>();
 
     final args = EvaluationPageArgs(
       title: title,
       imageUrl: url,
       instructions: instructions,
-      alternatives: alternatives,
+      alternatives: alternatives.cast<String, List<Ingredient>>(),
       ingredients: ingredients,
       newIngredients: newIngredients,
     );
@@ -105,11 +106,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
+            Image(image: AssetImage('assets/cactus.gif')),
           ],
         ),
       ),
@@ -119,6 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
+      backgroundColor: Colors.white,
     );
   }
 }
