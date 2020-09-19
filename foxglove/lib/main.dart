@@ -48,6 +48,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
     firebaseMessaging.getToken().then((value) => print(value));
 
+    firebaseMessaging
+        .subscribeToTopic("foods")
+        .whenComplete(() => print("Registered To Topic 'foods'"));
+
     firebaseMessaging.configure(
       onLaunch: _handleNotification,
       onMessage: _handleNotification,
@@ -59,6 +63,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _handleNotification(Map<dynamic, dynamic> message) async {
+    print("Got a new Message");
+    print(message['data']);
     final id = message['data']['id'];
 
     final res = await http.get('http://48d6a3f4ac35.ngrok.io/id?id=$id');

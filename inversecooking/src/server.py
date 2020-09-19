@@ -45,7 +45,29 @@ def get_content():
         with open(tmp_json, "r") as fp_:
             req_store = json.load(fp_)
 
+        if id_ not in req_store:
+            raise KeyError("ID not found")
+
         ret_dict = req_store[id_]
+
+    except KeyError:
+        print("Key not found")
+        is_valid = False
+        title = "Awesome Recipe"
+        ingrids = [("Potatoes", 1.0), ("And more Potatoes", 1.0)]
+        alt_ingrids = {"Potatoes": [("Carrott", 0.5)]}
+        new_ingrids = [("Carrot", 0.5), ("And more Potatoes", 1.0)]
+        recipes = ["Eat", "Sleep", "Train", "Repeat"]
+
+        ret_dict = {
+            "title": title,
+            "ingredients": ingrids,
+            "new": new_ingrids,
+            "alternatives": alt_ingrids,
+            "instructions": recipes,
+            "is_valid": is_valid,
+            "url": "https://www.196flavors.com/wp-content/uploads/2014/10/california-roll-3-FP.jpg",
+        }
 
     except Exception:
         is_valid = False
@@ -54,7 +76,7 @@ def get_content():
         alt_ingrids = {"Potatoes": [("Carrott", 0.5)]}
         new_ingrids = [("Carrot", 0.5), ("And more Potatoes", 1.0)]
         recipes = ["Eat", "Sleep", "Train", "Repeat"]
-        traceback.print_stack()
+        traceback.print_exc()
 
         ret_dict = {
             "title": title,

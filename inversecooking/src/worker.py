@@ -19,12 +19,20 @@ import random
 import time
 import json
 
+import firebase_admin
+from firebase_admin import credentials
+
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
 sys.path.append(os.path.join(os.path.dirname(__file__), "../../.."))
 
-
 base_dir = "/home/david/Downloads/foxglove/"
+
+cred = credentials.Certificate(os.path.join(base_dir, "carbon-foodprint-5881e-firebase-adminsdk-r0nck-3a0b85478e.json"))
+firebase_admin.initialize_app(cred)
+
+IG_USERNAME = "kolja.es"
+
 tmp_json = os.path.join(base_dir, "tmp_store.json")
 ig_tsmps = os.path.join(base_dir, "tmp.txt")
 req_store = {}
@@ -83,7 +91,7 @@ def get_random_string(length):
     return result_str
 
 
-def get_new_igpost(username="kolja.es"):
+def get_new_igpost(username=IG_USERNAME):
     from scraper import InstagramScraper
 
     scaper = InstagramScraper(username=username, latest_stamps=ig_tsmps)
@@ -174,21 +182,26 @@ def process_url(url, food_processor):
     return {"id": id_}
 
 
-def send_fcm_notification(payload):
-    url = "https://fcm.googleapis.com/fcm/send"
-    headers = {
-        "Authorization": "key=AAAAehyvb54:APA91bFMaZyjhRc1cRYMNVFbnfRwIh5O4jctld1HQxBqYR1d0KJLcy9u10OxH4tn9fajtGxz1CzhXCxH1Wpfyjfph08IFS2CQEmQa2DuPbSgEhHCVELbB5zxjmn4omfKp10g55FJjHVW",
-        "Content-Type": "application/json",
-    }
+def send_to_topic(payload):
+    # [START send_to_topic]
+    # The topic name can be optionally prefixed with "/topics/".
+    from firebase_admin import messaging
 
+    topic = "foods"
+
+    # See documentation on defining a message payload.
     payload["click_action"] = "FLUTTER_NOTIFICATION_CLICK"
 
-    params = {
-        "to": "eOFbb-cxSBeaZu15g-zfpq:APA91bHjbPYCb5eLt2JeG88fzTo0UkfVDImpAJ8ZumLq-12G0-N4Vj-ahixPk3GDPjobWcS42Yjq2-wkcZ0D5lq7pxkCfqhg3kXGtDSHT4Q4WCxR5xRM5LFAcopPfXKoTdhRaThaxhnS",
-        "notification": {"title": "Notification title", "body": "My notification text"},
-        "data": payload,
-    }
-    requests.post(url=url, headers=headers, json=params)
+    message = messaging.Message(
+        data=payload,
+        topic=topic,
+    )
+
+    # Send a message to the devices subscribed to the provided topic.
+    response = messaging.send(message)
+    # Response is a message ID string.
+    print("Successfully sent message:", response)
+    # [END send_to_topic]
 
 
 def do_the_magic_loop():
@@ -202,7 +215,7 @@ def do_the_magic_loop():
         for url in urls:
             print("Found a URL:", url)
             id_dict = process_url(url, food_processor)
-            send_fcm_notification(payload=id_dict)
+            send_to_topic(payload=id_dict)
 
         print("Sleeping now")
         time.sleep(600)
