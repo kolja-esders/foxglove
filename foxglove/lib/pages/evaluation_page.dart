@@ -1,5 +1,6 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 
 class EvaluationPage extends StatelessWidget {
   EvaluationPage(this.args);
@@ -35,6 +36,31 @@ class EvaluationPage extends StatelessWidget {
       padding: EdgeInsets.all(8),
       child: Text(text),
     );
+  }
+
+  Widget _buildPill2(String text, double footprint, String emoji) {
+    return Container(
+      //decoration:
+      //   BoxDecoration(borderRadius: BorderRadius.circular(4), color: color),
+      padding: EdgeInsets.all(8),
+      child: Column(children: [
+        Image.network(
+            'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/potato_1f954.png',
+            scale: 2.0),
+        Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+        ),
+        Text(footprint.toStringAsFixed(2) + "kg CO2",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontStyle: FontStyle.italic)),
+      ]),
+    );
+  }
+
+  Widget _buildIngredientPill2(Ingredient ingredient) {
+    return _buildPill2(ingredient.name, ingredient.footprint, "coffee");
   }
 
   Widget _buildIngredientPill(Ingredient ingredient, Color color) {
@@ -97,52 +123,53 @@ class EvaluationPage extends StatelessWidget {
             args.ingredients.length;
 
     return Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.center,
-
-        children: [
-          new Container(
-          //width: 50.0,
-          //height: 50.0,
-          padding: const EdgeInsets.all(30.0),
-          decoration: new BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.blueGrey.shade50,
-          ),
-            child: new Column(
-                    children: [
-                      Text(
-                        '$totalFootprint',
-                        style: TextStyle(fontWeight: FontWeight.bold,  fontSize: 36, color: Colors.blue.shade300),
-                      ),
-                      Text(
-                        'kg CO2',
-                        style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16, color: Colors.blue.shade300),
-                      ),
-
-                    ],
-            )
-          ),
-        ],
-      )
-    );
-  }
-
-
-  Widget _buildIngredients() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 32.0),
-      child: Row(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.only(top: 16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          ...args.ingredients.map((i) => _buildIngredientPill(i, Colors.red.shade200))
-        ],
+            new Container(
+                //width: 50.0,
+                //height: 50.0,
+                padding: const EdgeInsets.all(30.0),
+                decoration: new BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.blueGrey.shade50,
+                ),
+                child: new Column(
+                  children: [
+                    Text(
+                      '$totalFootprint',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 36,
+                          color: Colors.blue.shade300),
+                    ),
+                    Text(
+                      'kg CO2',
+                      style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                          color: Colors.blue.shade300),
+                    ),
+                  ],
+                )),
+          ],
+        ));
+  }
+
+  Widget _buildIngredients() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [...args.ingredients.map((i) => _buildIngredientPill2(i))],
+        ),
       ),
     );
-
   }
 
   Widget _buildImage() {
