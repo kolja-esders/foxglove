@@ -11,19 +11,22 @@ class EvaluationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(args.title),
-      ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+        child: Container(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildImage(),
-              _buildFootprint(),
-              _buildIngredients(),
-              _buildSuggestions(),
+              Container(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    _buildFootprint(),
+                    _buildIngredients(),
+                    _buildSuggestions(),
+                  ],
+                ),
+              ),
               // _buildInstructions(),
             ],
           ),
@@ -87,7 +90,7 @@ class EvaluationPage extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Text(
         text,
-        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
+        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 32),
       ),
     );
   }
@@ -122,8 +125,6 @@ class EvaluationPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             new Container(
-                //width: 50.0,
-                //height: 50.0,
                 padding: const EdgeInsets.all(30.0),
                 decoration: new BoxDecoration(
                   shape: BoxShape.circle,
@@ -136,7 +137,7 @@ class EvaluationPage extends StatelessWidget {
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 36, color: Colors.blue.shade300),
                     ),
                     Text(
-                      'kg CO2',
+                      'kg CO\u2082',
                       style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16, color: Colors.blue.shade300),
                     ),
                   ],
@@ -156,12 +157,50 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildImage() {
-    return Center(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: FancyShimmerImage(
-          imageUrl: args.imageUrl,
-        ),
+    return Container(
+      width: double.infinity,
+      height: 250,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          FittedBox(
+            fit: BoxFit.cover,
+            child: FancyShimmerImage(
+              imageUrl: args.imageUrl,
+            ),
+          ),
+          Container(
+            height: 350.0,
+            decoration: BoxDecoration(
+                color: Colors.white,
+                gradient:
+                    LinearGradient(begin: FractionalOffset.topCenter, end: FractionalOffset.bottomCenter, colors: [
+                  Colors.black.withOpacity(0.0),
+                  Colors.black.withOpacity(0.8),
+                ], stops: [
+                  0.5,
+                  1.0
+                ])),
+          ),
+          // Positioned(
+          //   bottom: 0,
+          //   child: Container(
+          //     height: 50,
+          //     width: double.infinity,
+          //     decoration: BoxDecoration(gradient: LinearGradient(colors: [Colors.blue, Colors.red])),
+          //   ),
+          // ),
+          Positioned(
+            bottom: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                args.title,
+                style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w500),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
