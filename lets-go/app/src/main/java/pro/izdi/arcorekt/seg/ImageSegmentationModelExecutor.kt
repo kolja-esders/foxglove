@@ -247,7 +247,7 @@ class ImageSegmentationModelExecutor(
 
     init {
 
-      val random = Random(System.currentTimeMillis())
+      val random = java.util.Random(System.currentTimeMillis())
       segmentColors[0] = Color.TRANSPARENT
       for (i in 1 until NUM_CLASSES) {
         segmentColors[i] = Color.argb(
@@ -265,6 +265,6 @@ class ImageSegmentationModelExecutor(
       }
     }
 
-    private fun getRandomRGBInt(random: Random) = (255 * random.nextFloat()).toInt()
+    private fun getRandomRGBInt(random: java.util.Random) = (255 * random.nextFloat()).toInt()
   }
 }
