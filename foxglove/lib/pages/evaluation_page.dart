@@ -1,6 +1,6 @@
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_emoji/flutter_emoji.dart';
+
 
 class EvaluationPage extends StatelessWidget {
   EvaluationPage(this.args)
@@ -32,10 +32,10 @@ class EvaluationPage extends StatelessWidget {
                     _buildFootprint(),
                     _buildIngredients(),
                     _buildSuggestions(),
+                    _buildInstructions(),
                   ],
                 ),
               ),
-              // _buildInstructions(),
             ],
           ),
         ),
@@ -206,6 +206,37 @@ class EvaluationPage extends StatelessWidget {
       ),
     );
   }
+
+
+  Widget _buildSingleInstruction(int idx, String instruction){
+    print(instruction);
+    return ListTile(
+      leading: Text(
+        (idx + 1).toString() + '.',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      title: Text(instruction),
+    );
+  }
+
+
+  Widget _buildInstructions(){
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Column(
+        children: [
+          _buildHeadline('Instructions'),
+            ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                ...args.instructions.asMap().entries.map((x) => _buildSingleInstruction(x.key, x.value))
+              ],
+            ),
+        ],
+      )
+    );
+  }
+
 
   Widget _buildImage() {
     return Container(
