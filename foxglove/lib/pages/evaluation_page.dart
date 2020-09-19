@@ -10,7 +10,7 @@ class EvaluationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Carbon Foodprint'),
+        title: Text(args.title),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,7 +29,8 @@ class EvaluationPage extends StatelessWidget {
 
   Widget _buildPill(String text, Color color) {
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: color),
+      decoration:
+          BoxDecoration(borderRadius: BorderRadius.circular(4), color: color),
       padding: EdgeInsets.all(8),
       child: Text(text),
     );
@@ -40,7 +41,9 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildAlternatives(String orig, List<Ingredient> alternatives) {
-    List<Widget> widgets = alternatives.map((i) => _buildIngredientPill(i, Colors.green.shade100)).toList();
+    List<Widget> widgets = alternatives
+        .map((i) => _buildIngredientPill(i, Colors.green.shade100))
+        .toList();
     widgets = widgets.expand((element) => [element, Text(', ')]).toList();
     widgets = widgets.take(widgets.length - 1).toList();
 
@@ -88,7 +91,9 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildFootprint() {
-    final totalFootprint = args.ingredients.map((i) => i.footprint).reduce((a, b) => a + b) / args.ingredients.length;
+    final totalFootprint =
+        args.ingredients.map((i) => i.footprint).reduce((a, b) => a + b) /
+            args.ingredients.length;
 
     return Container(
       alignment: Alignment.center,
@@ -111,7 +116,12 @@ class EvaluationPage extends StatelessWidget {
 
 class EvaluationPageArgs {
   EvaluationPageArgs(
-      {this.imageUrl, this.title, this.instructions, this.ingredients, this.alternatives, this.newIngredients});
+      {this.imageUrl,
+      this.title,
+      this.instructions,
+      this.ingredients,
+      this.alternatives,
+      this.newIngredients});
 
   final String title;
 
