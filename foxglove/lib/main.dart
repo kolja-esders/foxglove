@@ -48,9 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     firebaseMessaging.getToken().then((value) => print(value));
 
-    firebaseMessaging
-        .subscribeToTopic("foods")
-        .whenComplete(() => print("Registered To Topic 'foods'"));
+    firebaseMessaging.subscribeToTopic("foods").whenComplete(() => print("Registered To Topic 'foods'"));
 
     firebaseMessaging.configure(
       onLaunch: _handleNotification,
@@ -66,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print("Got a new Message");
     final id = message['data']['id'];
 
-    final res = await http.get('http://48d6a3f4ac35.ngrok.io/id?id=$id');
+    final res = await http.get('http://e9c50556c597.ngrok.io/id?id=$id');
 
     Map<String, dynamic> data = jsonDecode(res.body);
 
@@ -76,22 +74,20 @@ class _MyHomePageState extends State<MyHomePage> {
     final newIngredients = List.castFrom<dynamic, List<dynamic>>(data['new'])
         .map((e) => Ingredient(e.first as String, e.last as double))
         .toList();
-    final ingredients =
-        List.castFrom<dynamic, List<dynamic>>(data['ingredients'])
-            .map((e) => Ingredient(e.first as String, e.last as double))
-            .toList();
-    final alternatives = Map.castFrom<String, dynamic, String,
-            List<List<dynamic>>>(data['alternatives'])
+    final ingredients = List.castFrom<dynamic, List<dynamic>>(data['ingredients'])
+        .map((e) => Ingredient(e.first as String, e.last as double))
+        .toList();
+    final alternatives = Map.castFrom<String, dynamic, String, List<List<dynamic>>>(data['alternatives'])
         .cast()
-        .map((key, value) => MapEntry(key,
-            value.map((e) => Ingredient(e.first as String, e.last as double))))
+        .map((key, value) =>
+            MapEntry(key, (value as List).map((e) => Ingredient(e.first as String, e.last as double)).toList()))
         .cast<String, List<Ingredient>>();
 
     final args = EvaluationPageArgs(
       title: title,
       imageUrl: url,
       instructions: instructions,
-      alternatives: alternatives,
+      alternatives: alternatives.cast<String, List<Ingredient>>(),
       ingredients: ingredients,
       newIngredients: newIngredients,
     );
