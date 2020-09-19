@@ -49,7 +49,10 @@ class EvaluationPage extends StatelessWidget {
 }
 
 class EvaluationPageArgs {
-  EvaluationPageArgs({this.imageUrl, this.instructions, this.ingredients, this.alternatives, this.newIngredients});
+  EvaluationPageArgs(
+      {this.imageUrl, this.title, this.instructions, this.ingredients, this.alternatives, this.newIngredients});
+
+  final String title;
 
   final Map<String, List<Ingredient>> alternatives;
 

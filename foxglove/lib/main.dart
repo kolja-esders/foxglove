@@ -48,9 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     firebaseMessaging.getToken().then((value) => print(value));
 
-    firebaseMessaging
-        .subscribeToTopic("foods")
-        .whenComplete(() => print("Registered To Topic 'foods'"));
+    firebaseMessaging.subscribeToTopic("foods").whenComplete(() => print("Registered To Topic 'foods'"));
 
     firebaseMessaging.configure(
       onLaunch: _handleNotification,
@@ -64,7 +62,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> _handleNotification(Map<dynamic, dynamic> message) async {
     print("Got a new Message");
-    print(message['data']);
     final id = message['data']['id'];
 
     final res = await http.get('http://48d6a3f4ac35.ngrok.io/id?id=$id');
@@ -74,15 +71,19 @@ class _MyHomePageState extends State<MyHomePage> {
     final instructions = List.castFrom<dynamic, String>(data['instructions']);
     final title = data['title'] as String;
     final url = data['url'] as String;
-    final newIngredients =
-        List.castFrom<dynamic, List<dynamic>>(data['new']).map((e) => Ingredient(e.first as String, e.last as double));
+    final newIngredients = List.castFrom<dynamic, List<dynamic>>(data['new'])
+        .map((e) => Ingredient(e.first as String, e.last as double))
+        .toList();
     final ingredients = List.castFrom<dynamic, List<dynamic>>(data['ingredients'])
-        .map((e) => Ingredient(e.first as String, e.last as double));
+        .map((e) => Ingredient(e.first as String, e.last as double))
+        .toList();
     final alternatives = Map.castFrom<String, dynamic, String, List<List<dynamic>>>(data['alternatives'])
         .cast()
-        .map((key, value) => MapEntry(key, value.map((e) => Ingredient(e.first as String, e.last as double))));
+        .map((key, value) => MapEntry(key, value.map((e) => Ingredient(e.first as String, e.last as double))))
+        .cast<String, List<Ingredient>>();
 
     final args = EvaluationPageArgs(
+      title: title,
       imageUrl: url,
       instructions: instructions,
       alternatives: alternatives,
