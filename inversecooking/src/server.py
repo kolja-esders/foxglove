@@ -15,6 +15,8 @@ from utils.output_utils import prepare_output
 from PIL import Image
 import traceback
 import urllib
+import string
+import random
 
 app = Flask(__name__)
 
@@ -57,20 +59,29 @@ print("loaded model")
 ingr_co2 = pickle.load(open(os.path.join(data_dir, "ingr_co2.pkl"), "rb"))
 ingr_alternatives = pickle.load(open(os.path.join(data_dir, "ingr_alt.pkl"), "rb"))
 
+req_store = {}
+
+
 # @app.route("/")
 # def index():
 #     return "Hello, World!"
 
 
+def get_random_string(length):
+    # Random string with the combination of lower and upper case
+    letters = string.ascii_letters
+    result_str = "".join(random.choice(letters) for i in range(length))
+    return result_str
+
+
 @app.route("/food", methods=["GET"])
-def index():
+def process_img():
     url = request.args.get("url")
     url = urllib.parse.unquote(url)
 
     print("Got URL")
 
-    if True:
-        # try:
+    try:
 
         response = requests.get(url, stream=True)
         image = Image.open(BytesIO(response.content))
@@ -106,7 +117,7 @@ def index():
             if len(ingr_alternatives[ingr]) > 0:
                 alt_ingrids[ingr] = ingr_alternatives[ingr]
 
-                print(ingr, ingr_alternatives[ingr])
+                # print(ingr, ingr_alternatives[ingr])
 
                 new_ingr = ingr_alternatives[ingr][0][0]
                 new_ingrids.append((new_ingr, ingr_co2[new_ingr]))
@@ -119,14 +130,14 @@ def index():
 
         # ingrids = outs["ingrs"]
 
-    # except Exception:
-    #     is_valid = False
-    #     title = "Awesome Recipe"
-    #     ingrids = [("Potatoes", 1.0), ("And more Potatoes", 1.0)]
-    #     alt_ingrids = {"Potatoes": [("Carrott", 0.5)]}
-    #     new_ingrids = [("Carrot", 0.5), ("And more Potatoes", 1.0)]
-    #     recipes = ["Eat", "Sleep", "Train", "Repeat"]
-    #     traceback.print_stack()
+    except Exception:
+        is_valid = False
+        title = "Awesome Recipe"
+        ingrids = [("Potatoes", 1.0), ("And more Potatoes", 1.0)]
+        alt_ingrids = {"Potatoes": [("Carrott", 0.5)]}
+        new_ingrids = [("Carrot", 0.5), ("And more Potatoes", 1.0)]
+        recipes = ["Eat", "Sleep", "Train", "Repeat"]
+        traceback.print_stack()
 
     ret_dict = {
         "title": title,
@@ -137,6 +148,10 @@ def index():
         "is_valid": is_valid,
         "url": url,
     }
+
+    id_ = get_random_string(16)
+
+    req_store[id_] = ret_dict
 
     # if valid["is_valid"] or show_anyways:
 
@@ -154,6 +169,36 @@ def index():
     #     print("-" + "\n-".join(outs["recipe"]))
 
     #     print("=" * 20)
+
+    # return jsonify(ret_dict)
+    return jsonify({"id": id_})
+
+
+@app.route("/id", methods=["GET"])
+def get_content():
+
+    id_ = request.args.get("id")
+
+    try:
+        ret_dict = req_store[id_]
+    except Exception:
+        is_valid = False
+        title = "Awesome Recipe"
+        ingrids = [("Potatoes", 1.0), ("And more Potatoes", 1.0)]
+        alt_ingrids = {"Potatoes": [("Carrott", 0.5)]}
+        new_ingrids = [("Carrot", 0.5), ("And more Potatoes", 1.0)]
+        recipes = ["Eat", "Sleep", "Train", "Repeat"]
+        traceback.print_stack()
+
+        ret_dict = {
+            "title": title,
+            "ingredients": ingrids,
+            "new": new_ingrids,
+            "alternatives": alt_ingrids,
+            "instructions": recipes,
+            "is_valid": is_valid,
+            "url": "https://www.196flavors.com/wp-content/uploads/2014/10/california-roll-3-FP.jpg",
+        }
 
     return jsonify(ret_dict)
 
