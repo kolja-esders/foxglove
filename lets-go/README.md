@@ -1,2 +1,0 @@
-Kotlin ARCore Sample App
-========================

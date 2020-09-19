@@ -1,7 +1,0 @@
-#Sat Sep 19 01:34:13 CEST 2020
-base.0=/home/david/Documents/ws/examples/lite/examples/image_segmentation/android/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
-path.1=classes.dex
-renamed.1=classes2.dex
-path.0=classes.dex
-renamed.0=classes.dex
-base.1=/home/david/Documents/ws/examples/lite/examples/image_segmentation/android/app/build/intermediates/dex/debug/mergeProjectDexDebug/classes.dex
