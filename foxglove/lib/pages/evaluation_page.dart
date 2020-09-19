@@ -40,13 +40,31 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildAlternatives(String orig, List<Ingredient> alternatives) {
-    return Row(
-      children: [
-        Text('Replace '),
-        _buildPill(orig, Colors.red.shade100),
-        Text(' with '),
-        ...alternatives.map((i) => _buildIngredientPill(i, Colors.green.shade100)),
-      ],
+    List<Widget> widgets = alternatives.map((i) => _buildIngredientPill(i, Colors.green.shade100)).toList();
+    widgets = widgets.expand((element) => [element, Text(', ')]).toList();
+    widgets = widgets.take(widgets.length - 1).toList();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      child: Row(
+        children: [
+          Text('Replace '),
+          _buildPill(orig, Colors.red.shade100),
+          Text(' with '),
+          ...widgets,
+          Text('.'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeadline(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Text(
+        text,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      ),
     );
   }
 
@@ -62,13 +80,7 @@ class EvaluationPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              'How to improve',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-          ),
+          _buildHeadline('How to improve'),
           ...alternatives,
         ],
       ),
