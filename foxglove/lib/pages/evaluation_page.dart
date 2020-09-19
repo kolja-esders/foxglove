@@ -30,6 +30,7 @@ class EvaluationPage extends StatelessWidget {
   Widget _buildPill(String text, Color color) {
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: color),
+      padding: EdgeInsets.all(8),
       child: Text(text),
     );
   }
@@ -41,22 +42,34 @@ class EvaluationPage extends StatelessWidget {
   Widget _buildAlternatives(String orig, List<Ingredient> alternatives) {
     return Row(
       children: [
-        _buildPill(orig, Colors.red.shade200),
-        ...alternatives.map((i) => _buildIngredientPill(i, Colors.green.shade200)),
+        Text('Replace '),
+        _buildPill(orig, Colors.red.shade100),
+        Text(' with '),
+        ...alternatives.map((i) => _buildIngredientPill(i, Colors.green.shade100)),
       ],
     );
   }
 
   Widget _buildSuggestions() {
+    final alternatives = <Widget>[];
+    for (final alternative in args.alternatives.keys) {
+      final ingredients = args.alternatives[alternative];
+      alternatives.add(_buildAlternatives(alternative, ingredients));
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'How to improve',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'How to improve',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
           ),
-          // ...args.alternatives.((key, value) => _buildAlternatives(key, value))
+          ...alternatives,
         ],
       ),
     );
