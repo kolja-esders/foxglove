@@ -25,14 +25,16 @@ tmp_json = os.path.join(base_dir, "tmp_store.json")
 
 @app.route("/food", methods=["GET"])
 def process_img():
-    from worker import process_url
+    from worker import process_url, FoodProcessor
+
+    food_processor = FoodProcessor()
 
     url = request.args.get("url")
     url = urllib.parse.unquote(url)
 
     print("Got URL")
 
-    return jsonify(process_url(url))
+    return jsonify(process_url(url, food_processor))
 
 
 @app.route("/id", methods=["GET"])
