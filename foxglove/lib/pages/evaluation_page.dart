@@ -63,6 +63,8 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildPill2(String text, double footprint, String emoji) {
+    final updatedText = '${text.toUpperCase().substring(0, 1)}${text.substring(1)}'.replaceAll('_', ' ');
+
     return Container(
       //decoration:
       //   BoxDecoration(borderRadius: BorderRadius.circular(4), color: color),
@@ -73,7 +75,7 @@ class EvaluationPage extends StatelessWidget {
                 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/bento-box_1f371.png',
             scale: 2.0),
         Text(
-          text,
+          updatedText,
           textAlign: TextAlign.center,
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
         ),
@@ -115,7 +117,7 @@ class EvaluationPage extends StatelessWidget {
 
   Widget _buildHeadline(String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsets.only(bottom: 16.0),
       child: Text(
         text,
         style: TextStyle(fontWeight: FontWeight.w400, fontSize: 32),
@@ -153,11 +155,11 @@ class EvaluationPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             new Container(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(12.0),
                 decoration: new BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.orange.shade200.withOpacity(0.6),
-                    border: Border.all(width: 3, color: Colors.orange.shade500.withOpacity(0.6))),
+                    color: Colors.orange.shade200.withOpacity(0.9),
+                    border: Border.all(width: 3, color: Colors.orange.shade500.withOpacity(0.9))),
                 child: new Column(
                   children: [
                     Padding(
@@ -166,8 +168,8 @@ class EvaluationPage extends StatelessWidget {
                         '${totalFootprint.toStringAsFixed(2)}',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                          letterSpacing: -1,
+                          fontSize: 28,
+                          letterSpacing: -1.5,
                           color: Colors.orange.shade900,
                         ),
                       ),
@@ -176,7 +178,7 @@ class EvaluationPage extends StatelessWidget {
                       'kg CO\u2082',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 10,
+                        fontSize: 12,
                         color: Colors.orange.shade900,
                       ),
                       textAlign: TextAlign.center,
