@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 class EvaluationPage extends StatelessWidget {
   EvaluationPage(this.args) : nameToIngredient = Map.fromIterable(args.ingredients, key: (i) => i.name);
   ScrollController _controller = new ScrollController();
-  EvaluationPage(this.args)
-      : nameToIngredient =
-            Map.fromIterable(args.ingredients, key: (i) => i.name);
+
 
   final EvaluationPageArgs args;
 
