@@ -25,6 +25,7 @@ class EvaluationPage extends StatelessWidget {
                 padding: EdgeInsets.all(16),
                 child: Column(
                   children: [
+                    _buildFootprintVisualization(),
                     _buildIngredients(),
                     _buildSuggestions(),
                     _buildInstructions(),
@@ -188,6 +189,30 @@ class EvaluationPage extends StatelessWidget {
           ],
         ));
   }
+
+
+  Widget _buildFootprintVisualization() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeadline('Your Impact'),
+          Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image(image: AssetImage('assets/earth.png'), width: 50, height: 50),
+              SizedBox(width: 10),
+              Image(image: AssetImage('assets/earth.png'), width: 50, height: 50),
+              SizedBox(width: 10),
+              Image(image: AssetImage('assets/earth.png'), width: 50, height: 50),
+            ],
+         ),
+      ],
+    ),
+    );
+  }
+
 
   Widget _buildIngredients() {
     return SingleChildScrollView(
