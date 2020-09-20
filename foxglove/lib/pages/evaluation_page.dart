@@ -21,7 +21,6 @@ class EvaluationPage extends StatelessWidget {
                 padding: EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    _buildFootprint(),
                     _buildIngredients(),
                     _buildSuggestions(),
                   ],
@@ -44,14 +43,14 @@ class EvaluationPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         child: Row(
           children: [
-            Text(text),
+            Text(text.replaceAll('_', ' ')),
             if (footprint != null)
               Container(
                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(2), color: fgColor),
                 padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                 margin: EdgeInsets.only(left: 4),
                 child: Text(
-                  '$footprint kg CO\u2082',
+                  '${footprint.toStringAsFixed(2)} kg CO\u2082',
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -119,26 +118,39 @@ class EvaluationPage extends StatelessWidget {
 
     return Container(
         alignment: Alignment.center,
-        padding: const EdgeInsets.only(top: 16.0),
+        padding: const EdgeInsets.only(top: 36.0, right: 16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             new Container(
-                padding: const EdgeInsets.all(30.0),
+                padding: const EdgeInsets.all(8.0),
                 decoration: new BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.blueGrey.shade50,
-                ),
+                    shape: BoxShape.circle,
+                    color: Colors.orange.shade200.withOpacity(0.6),
+                    border: Border.all(width: 3, color: Colors.orange.shade500.withOpacity(0.6))),
                 child: new Column(
                   children: [
-                    Text(
-                      '$totalFootprint',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 36, color: Colors.blue.shade300),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        '${totalFootprint.toStringAsFixed(2)}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          letterSpacing: -1,
+                          color: Colors.orange.shade900,
+                        ),
+                      ),
                     ),
                     Text(
                       'kg CO\u2082',
-                      style: TextStyle(fontWeight: FontWeight.normal, fontSize: 16, color: Colors.blue.shade300),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                        color: Colors.orange.shade900,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ],
                 )),
@@ -159,7 +171,7 @@ class EvaluationPage extends StatelessWidget {
   Widget _buildImage() {
     return Container(
       width: double.infinity,
-      height: 250,
+      height: 300,
       child: Stack(
         fit: StackFit.expand,
         children: [
@@ -191,6 +203,11 @@ class EvaluationPage extends StatelessWidget {
                 style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w500),
               ),
             ),
+          ),
+          Positioned(
+            child: _buildFootprint(),
+            top: 0,
+            right: 0,
           )
         ],
       ),
