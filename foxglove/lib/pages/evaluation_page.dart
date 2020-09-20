@@ -2,14 +2,26 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 
 class EvaluationPage extends StatelessWidget {
-  EvaluationPage(this.args) : nameToIngredient = Map.fromIterable(args.ingredients, key: (i) => i.name);
+  EvaluationPage(this.args)
+      : nameToIngredient =
+            Map.fromIterable(args.ingredients, key: (i) => i.name);
 
   final EvaluationPageArgs args;
 
   final Map<String, Ingredient> nameToIngredient;
 
   final emojis = {
-    'Potatoes': 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/potato_1f954.png',
+    'Potatoes':
+        'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/potato_1f954.png',
+    'salmon':
+        'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/fish_1f41f.png',
+    'rice':
+        'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/cooked-rice_1f35a.png',
+    'oil':
+        'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/sake_1f376.png',
+    'salt':
+        'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/salt_1f9c2.png',
+    'pepper': ''
   };
 
   @override
@@ -43,14 +55,16 @@ class EvaluationPage extends StatelessWidget {
     final fgColor = isGood ? Colors.green.shade50 : Colors.red.shade50;
 
     return Container(
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: bgColor),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4), color: bgColor),
         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         child: Row(
           children: [
             Text(text.replaceAll('_', ' ')),
             if (footprint != null)
               Container(
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(2), color: fgColor),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2), color: fgColor),
                 padding: EdgeInsets.symmetric(vertical: 2, horizontal: 4),
                 margin: EdgeInsets.only(left: 4),
                 child: Text(
@@ -63,7 +77,9 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildPill2(String text, double footprint, String emoji) {
-    final updatedText = '${text.toUpperCase().substring(0, 1)}${text.substring(1)}'.replaceAll('_', ' ');
+    final updatedText =
+        '${text.toUpperCase().substring(0, 1)}${text.substring(1)}'
+            .replaceAll('_', ' ');
 
     return Container(
       //decoration:
@@ -80,7 +96,8 @@ class EvaluationPage extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
         ),
         Text(footprint.toStringAsFixed(2) + "kg CO2",
-            textAlign: TextAlign.center, style: TextStyle(fontStyle: FontStyle.italic)),
+            textAlign: TextAlign.center,
+            style: TextStyle(fontStyle: FontStyle.italic)),
       ]),
     );
   }
@@ -90,11 +107,14 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildIngredientPill(Ingredient ingredient, Color color) {
-    return _buildPill(ingredient.name, isGood: true, footprint: ingredient.footprint);
+    return _buildPill(ingredient.name,
+        isGood: true, footprint: ingredient.footprint);
   }
 
   Widget _buildAlternatives(String orig, List<Ingredient> alternatives) {
-    List<Widget> widgets = alternatives.map((i) => _buildIngredientPill(i, Colors.green.shade100)).toList();
+    List<Widget> widgets = alternatives
+        .map((i) => _buildIngredientPill(i, Colors.green.shade100))
+        .toList();
     widgets = widgets.expand((element) => [element, Text(', ')]).toList();
     widgets = widgets.take(widgets.length - 1).toList();
 
@@ -105,7 +125,8 @@ class EvaluationPage extends StatelessWidget {
         child: Row(
           children: [
             Text('Replace '),
-            _buildPill(orig, isGood: false, footprint: nameToIngredient[orig].footprint),
+            _buildPill(orig,
+                isGood: false, footprint: nameToIngredient[orig].footprint),
             Text(' with '),
             ...widgets,
             Text('.'),
@@ -145,7 +166,9 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildFootprint() {
-    final totalFootprint = args.ingredients.map((i) => i.footprint).reduce((a, b) => a + b) / args.ingredients.length;
+    final totalFootprint =
+        args.ingredients.map((i) => i.footprint).reduce((a, b) => a + b) /
+            args.ingredients.length;
 
     return Container(
         alignment: Alignment.center,
@@ -159,7 +182,9 @@ class EvaluationPage extends StatelessWidget {
                 decoration: new BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.orange.shade200.withOpacity(0.9),
-                    border: Border.all(width: 3, color: Colors.orange.shade500.withOpacity(0.9))),
+                    border: Border.all(
+                        width: 3,
+                        color: Colors.orange.shade500.withOpacity(0.9))),
                 child: new Column(
                   children: [
                     Padding(
@@ -224,7 +249,10 @@ class EvaluationPage extends StatelessWidget {
             ListView(
               shrinkWrap: true,
               children: <Widget>[
-                ...args.instructions.asMap().entries.map((x) => _buildSingleInstruction(x.key + 1, x.value))
+                ...args.instructions
+                    .asMap()
+                    .entries
+                    .map((x) => _buildSingleInstruction(x.key + 1, x.value))
               ],
             ),
           ],
@@ -248,14 +276,17 @@ class EvaluationPage extends StatelessWidget {
             height: 350.0,
             decoration: BoxDecoration(
                 color: Colors.white,
-                gradient:
-                    LinearGradient(begin: FractionalOffset.topCenter, end: FractionalOffset.bottomCenter, colors: [
-                  Colors.black.withOpacity(0.0),
-                  Colors.black.withOpacity(0.8),
-                ], stops: [
-                  0.5,
-                  1.0
-                ])),
+                gradient: LinearGradient(
+                    begin: FractionalOffset.topCenter,
+                    end: FractionalOffset.bottomCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.0),
+                      Colors.black.withOpacity(0.8),
+                    ],
+                    stops: [
+                      0.5,
+                      1.0
+                    ])),
           ),
           Positioned(
             bottom: 0,
@@ -263,7 +294,10 @@ class EvaluationPage extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 args.title,
-                style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.w500),
               ),
             ),
           ),
@@ -280,7 +314,12 @@ class EvaluationPage extends StatelessWidget {
 
 class EvaluationPageArgs {
   EvaluationPageArgs(
-      {this.imageUrl, this.title, this.instructions, this.ingredients, this.alternatives, this.newIngredients});
+      {this.imageUrl,
+      this.title,
+      this.instructions,
+      this.ingredients,
+      this.alternatives,
+      this.newIngredients});
 
   final String title;
 
