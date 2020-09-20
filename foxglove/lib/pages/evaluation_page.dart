@@ -8,6 +8,10 @@ class EvaluationPage extends StatelessWidget {
 
   final Map<String, Ingredient> nameToIngredient;
 
+  final emojis = {
+    'Potatoes': 'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/potato_1f954.png',
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,10 +27,10 @@ class EvaluationPage extends StatelessWidget {
                   children: [
                     _buildIngredients(),
                     _buildSuggestions(),
+                    _buildInstructions(),
                   ],
                 ),
               ),
-              // _buildInstructions(),
             ],
           ),
         ),
@@ -56,6 +60,31 @@ class EvaluationPage extends StatelessWidget {
               ),
           ],
         ));
+  }
+
+  Widget _buildPill2(String text, double footprint, String emoji) {
+    return Container(
+      //decoration:
+      //   BoxDecoration(borderRadius: BorderRadius.circular(4), color: color),
+      padding: EdgeInsets.all(8),
+      child: Column(children: [
+        Image.network(
+            emojis[text] ??
+                'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/bento-box_1f371.png',
+            scale: 2.0),
+        Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+        ),
+        Text(footprint.toStringAsFixed(2) + "kg CO2",
+            textAlign: TextAlign.center, style: TextStyle(fontStyle: FontStyle.italic)),
+      ]),
+    );
+  }
+
+  Widget _buildIngredientPill2(Ingredient ingredient) {
+    return _buildPill2(ingredient.name, ingredient.footprint, "coffee");
   }
 
   Widget _buildIngredientPill(Ingredient ingredient, Color color) {
@@ -159,13 +188,45 @@ class EvaluationPage extends StatelessWidget {
   }
 
   Widget _buildIngredients() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 32.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [...args.ingredients.map((i) => _buildIngredientPill(i, Colors.red.shade200))],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [...args.ingredients.map((i) => _buildIngredientPill2(i))],
+        ),
       ),
     );
+  }
+
+  Widget _buildSingleInstruction(int idx, String instruction) {
+    print(instruction);
+    return ListTile(
+      leading: Icon(Icons.arrow_forward),
+      /* Text(
+        idx.toString() + '.',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ), */
+      title: Text(instruction),
+    );
+  }
+
+  Widget _buildInstructions() {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeadline('Instructions'),
+            ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                ...args.instructions.asMap().entries.map((x) => _buildSingleInstruction(x.key + 1, x.value))
+              ],
+            ),
+          ],
+        ));
   }
 
   Widget _buildImage() {
