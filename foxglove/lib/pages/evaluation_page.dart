@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class EvaluationPage extends StatelessWidget {
   EvaluationPage(this.args) : nameToIngredient = Map.fromIterable(args.ingredients, key: (i) => i.name);
-
+  ScrollController _controller = new ScrollController();
   final EvaluationPageArgs args;
 
   final Map<String, Ingredient> nameToIngredient;
@@ -222,6 +222,8 @@ class EvaluationPage extends StatelessWidget {
           children: [
             _buildHeadline('Instructions'),
             ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              controller: _controller,
               shrinkWrap: true,
               children: <Widget>[
                 ...args.instructions.asMap().entries.map((x) => _buildSingleInstruction(x.key + 1, x.value))
