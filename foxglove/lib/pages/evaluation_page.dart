@@ -205,10 +205,11 @@ class EvaluationPage extends StatelessWidget {
   Widget _buildSingleInstruction(int idx, String instruction){
     print(instruction);
     return ListTile(
-      leading: Text(
-        (idx + 1).toString() + '.',
+      leading: Icon(Icons.arrow_forward),
+      /* Text(
+        idx.toString() + '.',
         style: TextStyle(fontWeight: FontWeight.bold),
-      ),
+      ), */
       title: Text(instruction),
     );
   }
@@ -218,12 +219,13 @@ class EvaluationPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildHeadline('Instructions'),
             ListView(
               shrinkWrap: true,
               children: <Widget>[
-                ...args.instructions.asMap().entries.map((x) => _buildSingleInstruction(x.key, x.value))
+                ...args.instructions.asMap().entries.map((x) => _buildSingleInstruction(x.key + 1, x.value))
               ],
             ),
         ],
