@@ -22,8 +22,7 @@ class EvaluationPage extends StatelessWidget {
     'oil':
         'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/sake_1f376.png',
     'salt':
-        'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/salt_1f9c2.png',
-    'pepper': ''
+        'https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/salt_1f9c2.pnggg',
   };
 
   @override
